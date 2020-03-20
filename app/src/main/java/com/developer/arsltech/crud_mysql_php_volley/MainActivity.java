@@ -2,16 +2,15 @@ package com.developer.arsltech.crud_mysql_php_volley;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,11 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.myListView);
         adapter = new MyAdapter(this,employeeArrayList);
         listView.setAdapter(adapter);
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -57,63 +52,44 @@ public class MainActivity extends AppCompatActivity {
                 builder.setItems(dialogItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-
                         switch (i){
 
                             case 0:
-
                                 startActivity(new Intent(getApplicationContext(),DetailActivity.class)
                                 .putExtra("position",position));
-
                                 break;
 
                             case 1:
                                 startActivity(new Intent(getApplicationContext(),Edit_Activity.class)
                                 .putExtra("position",position));
-
                                 break;
 
                             case 2:
-
                                 deleteData(employeeArrayList.get(position).getId());
-
+                                Log.d("check","id delete ==>"+employeeArrayList.get(position).getId());
                                 break;
-
-
                         }
-
-
-
                     }
                 });
-
-
                 builder.create().show();
-
-
             }
         });
-
         retrieveData();
-
-
     }
 
     private void deleteData(final String id) {
 
-        StringRequest request = new StringRequest(Request.Method.POST, "https://192.168.64.2/test/delete.php",
+        StringRequest request = new StringRequest(Request.Method.POST, "http://192.168.64.2/test/delete.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
                         if(response.equalsIgnoreCase("Data Deleted")){
-                            Toast.makeText(MainActivity.this, "Data Deleted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Data Deleted Successfully"+response, Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(MainActivity.this, "Data Not Deleted", Toast.LENGTH_SHORT).show();
                         }
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -133,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
 
-
+        // redfresh data
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
+    // get data
     public void retrieveData(){
-
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -152,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
                             if(sucess.equals("1")){
 
-
                                 for(int i=0;i<jsonArray.length();i++){
 
                                     JSONObject object = jsonArray.getJSONObject(i);
@@ -166,28 +143,12 @@ public class MainActivity extends AppCompatActivity {
                                     employee = new Employee(id,name,email,contact,address);
                                     employeeArrayList.add(employee);
                                     adapter.notifyDataSetChanged();
-
-
-
                                 }
-
-
-
                             }
-
-
-
-
                         }
                         catch (JSONException e){
                             e.printStackTrace();
                         }
-
-
-
-
-
-
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -198,9 +159,6 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
-
-
-
 
     }
     public void btn_add_activity(View view) {

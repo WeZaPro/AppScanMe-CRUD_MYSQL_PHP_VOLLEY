@@ -3,6 +3,7 @@ package com.developer.arsltech.crud_mysql_php_volley;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -113,6 +114,9 @@ public class Add_Data_Activity extends AppCompatActivity {
 
             RequestQueue requestQueue = Volley.newRequestQueue(Add_Data_Activity.this);
             requestQueue.add(request);
+
+            Intent i = new Intent(Add_Data_Activity.this,MainActivity.class);
+            startActivity(i);
         }
     }
 

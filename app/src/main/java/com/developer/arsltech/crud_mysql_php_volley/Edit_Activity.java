@@ -22,8 +22,9 @@ import java.util.Map;
 
 public class Edit_Activity extends AppCompatActivity {
 
-    EditText edId,edName,edContact,edEmail,edAddress;
+    EditText edId, edName, edContact, edEmail, edAddress;
     private int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +38,11 @@ public class Edit_Activity extends AppCompatActivity {
 
         Intent intent = getIntent();
         position = intent.getExtras().getInt("position");
-
-
         edId.setText(MainActivity.employeeArrayList.get(position).getId());
         edName.setText(MainActivity.employeeArrayList.get(position).getName());
         edEmail.setText(MainActivity.employeeArrayList.get(position).getEmail());
         edContact.setText(MainActivity.employeeArrayList.get(position).getContact());
         edAddress.setText(MainActivity.employeeArrayList.get(position).getAddress());
-
-
-
 
     }
 
@@ -57,11 +53,6 @@ public class Edit_Activity extends AppCompatActivity {
         final String contact = edContact.getText().toString();
         final String address = edAddress.getText().toString();
         final String id = edId.getText().toString();
-
-
-
-
-
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating....");
         progressDialog.show();
@@ -72,7 +63,7 @@ public class Edit_Activity extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         Toast.makeText(Edit_Activity.this, response, Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         finish();
                         progressDialog.dismiss();
                     }
@@ -84,18 +75,18 @@ public class Edit_Activity extends AppCompatActivity {
                 progressDialog.dismiss();
 
             }
-        }){
+        }) {
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
-                Map<String,String> params = new HashMap<String,String>();
+                Map<String, String> params = new HashMap<String, String>();
 
-                params.put("id",id);
-                params.put("name",name);
-                params.put("email",email);
-                params.put("contact",contact);
-                params.put("address",address);
+                params.put("id", id);
+                params.put("name", name);
+                params.put("email", email);
+                params.put("contact", contact);
+                params.put("address", address);
 
                 return params;
             }
@@ -103,10 +94,5 @@ public class Edit_Activity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(Edit_Activity.this);
         requestQueue.add(request);
-
-
-
-
-
     }
 }
